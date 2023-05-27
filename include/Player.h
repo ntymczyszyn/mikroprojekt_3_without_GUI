@@ -5,7 +5,7 @@
 class Player{
 public:
     Player(char type_, int point);
-     virtual std::vector<int> makeMove();
+     virtual std::vector<int> makeMove() = 0; // do I need virtual keyword
     //bool validateMove();
     char getType() const;
 private:

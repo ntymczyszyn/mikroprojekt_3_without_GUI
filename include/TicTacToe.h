@@ -3,6 +3,8 @@
 #include <vector>
 #include <string>
 #include "Player.h"
+#include "HumanPlayer.h"
+
 
 class TicTacToe {
 public:
@@ -21,8 +23,8 @@ private:
     int rows;
     int columns;
     int wf; //winingfields
-    Player playerO; // or maybe pointers??
-    Player playerX;
+    HumanPlayer playerO; // or maybe pointers??
+    HumanPlayer playerX; // how to change to use Player class here
     friend class Player;
 };
 #endif //MIKROPROJEKT_3_WITHOUT_GUI_TICTACTOE_H

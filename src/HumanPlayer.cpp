@@ -2,6 +2,10 @@
 #include <string>
 #include <iostream>
 
+HumanPlayer::HumanPlayer(char type_, int point) : Player(type_, point){
+
+}
+
 std::vector<int> HumanPlayer::makeMove(){
 
     std::string choice{};
@@ -20,5 +24,7 @@ std::vector<int> HumanPlayer::makeMove(){
     // for now let's assume that it is always correct
     // for now there are strings
 }
+
+
 
 

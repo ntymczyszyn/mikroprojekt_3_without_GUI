@@ -4,7 +4,7 @@
 // coś jest chyba nie tak z użytkowaniem vectorów - > trzeba był0 jednak inaczej inicjować
 
 TicTacToe::TicTacToe(int numRows, int numColumns, int winningF):
-    rows(numRows), columns(numColumns), board(numRows, std::vector<int> (numColumns, 0)), wf(winningF), playerO('O'), playerX('X'){
+    rows(numRows), columns(numColumns), board(numRows, std::vector<int> (numColumns, 0)), wf(winningF), playerO('O', 1), playerX('X', 1){
 //    board[0][0] = 1;
 //    board[1][1] = 1;
 //    board[2][2] = 2;
