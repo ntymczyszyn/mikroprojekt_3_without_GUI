@@ -12,17 +12,17 @@ public:
 
     void play(bool XTurn); // true == playerO
     void displayBoard();
-    void updateBoard(Player* currentPlayer);
-    bool checkForEndState(); // to check if current board is a winning one or a tie
+    void updateBoard(bool XTurn);
+    bool checkForEndState();
     void printWinner();
     bool empty();
 
 private:
-    std::string whichSign(int score);
+    std::string whichSign(const int& score); // what static does??
     std::vector<std::vector<int>> board; // size will be
     int rows;
     int columns;
-    int wf; //winingfields
+    int wf; // wining fields
     HumanPlayer playerO; // or maybe pointers??
     HumanPlayer playerX; // how to change to use Player class here
     friend class Player;

@@ -8,6 +8,7 @@ public:
      virtual std::vector<int> makeMove() = 0; // do I need virtual keyword
     //bool validateMove();
     char getType() const;
+    int getPoint() const;
 private:
     char type; // X or O
     int point;

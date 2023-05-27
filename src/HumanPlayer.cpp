@@ -17,6 +17,7 @@ std::vector<int> HumanPlayer::makeMove(){
     std::cout << choice[0] << " " << choice[1] << std::endl;
 
     return {std::stoi(choice) - 1, static_cast<int>(choice[1]) - 65};
+    //WHAT IF ITS 10 OR MORE
     // how to change to proper casting??
     // why can't I use c++20 features
     // check if the field is not already taken
