@@ -2,16 +2,7 @@
 #define MIKROPROJEKT_3_WITHOUT_GUI_TICTACTOE_H
 #include <vector>
 #include <string>
-
-class Player{
-public:
-    Player(char type_);
-    std::string makeMove();
-    //bool validateMove();
-    char getType() const;
-private:
-    char type; // X or O
-};
+#include "Player.h"
 
 class TicTacToe {
 public:
@@ -27,7 +18,6 @@ public:
 private:
     std::string whichSign(int score);
     std::vector<std::vector<int>> board; // size will be
-    //int* boardd;
     int rows;
     int columns;
     int wf; //winingfields
