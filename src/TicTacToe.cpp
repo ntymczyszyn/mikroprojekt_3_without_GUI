@@ -65,7 +65,7 @@ void TicTacToe::updateBoard(bool XTurn) {
     board[pos[0]][pos[1]] = currentPlayer->getPoint();
 }
 
-bool TicTacToe::checkForEndState() {
+bool TicTacToe::checkForEndState() { // trzeba sprawdzac przeciez ciaglości wystepowania tych wartosci
     std::vector<int> winningRow(rows);
     std::vector<int> winningColumn(columns);
 
@@ -86,30 +86,42 @@ bool TicTacToe::checkForEndState() {
         }
     }
 
-//    std::vector<int> winningAcrossLeft((rows - wf) * 2 + 1);
-//    std::vector<int> winningAcrossRight((rows - wf) * 2 + 1);
-//
-//    for (unsigned int row{0}; row < rows; ++row){
-//            winningAcrossLeft += board[row][row];
-//            winningAcrossRight += board[rows - row - 1][rows - row - 1]; // assuming it will be square
-//    }
-//        if (winningAcrossLeft == 1 * wf or winningAcrossLeft == -1 * wf)   {
-//            return true;
-//        }
-//        else if (winningAcrossRight == 1 * wf or winningAcrossRight== -1 * wf) {
-//            return true;
-//        }
-//
-//    for (const auto& winLeft : winningAcrossLeft){
-//        if (winLeft == 1 * wf or winLeft == -1 * wf){
-//            return true;
-//        }
-//    }
-//    for (const auto& winRight : winningAcrossRight){
-//        if (winRight == 1 * wf or winRight == -1 * wf){
-//            return true;
-//        }
-//    }
+    int numOfDiagonals{(rows - wf) * 2 + 1};
+    int diagonal{0};
+    std::vector<int> winningAcrossLeft(numOfDiagonals);
+
+    for (int row{0}; row < wf -1 ; ++row){
+        for (int column{0}; column < wf -1; ++column) {
+            for (int k{0}; k < rows - row and k < columns - column; ++k){
+                winningAcrossLeft[diagonal] += board[k + row][k + column]; //te wartosci musza wystepowac zawsze po sobie
+                // moża zrobic jakas flage ciaglosci - jest brak (jesli te ten sam numer po sobie numer to flaga sie zmieniłą to zerwanie wyniku
+            }
+            ++diagonal;
+        }
+    }
+    for (const auto& winLeft : winningAcrossLeft){
+        if (winLeft == 1 * wf or winLeft == -1 * wf){
+            return true;
+        }
+    }
+
+    diagonal = 0;
+    std::vector<int> winningAcrossRight(numOfDiagonals);
+
+    for (int row{0}; row < wf - 1 ; ++row){
+        for (int column{0}; column < wf - 1; ++column) {
+            for (int k{0}; k < rows - row and k < columns - column; ++k){
+                winningAcrossRight[diagonal] += board[k + row][k + column]; //te wartosci musza wystepowac zawsze po sobie
+                // moża zrobic jakas flage ciaglosci - jest brak (jesli te ten sam numer po sobie numer to flaga sie zmieniłą to zerwanie wyniku
+            }
+            ++diagonal;
+        }
+    }
+    for (const auto& winRight : winningAcrossRight){
+        if (winRight == 1 * wf or winRight == -1 * wf){
+            return true;
+        }
+    }
 
     for (int row{0}; row < rows; ++row) {
         for (int column{0}; column < columns; ++column) {
@@ -123,7 +135,7 @@ bool TicTacToe::checkForEndState() {
 }
 
 bool TicTacToe::empty() {
-    for (int row{0}; row < rows; ++row){ // TODO: refactor this part
+    for (int row{0}; row < rows; ++row){
         for (int column{0}; column < columns; ++column) {
             if (board[row][column] != 0) {
                 return false;
