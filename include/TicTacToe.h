@@ -14,7 +14,7 @@ public:
     void displayBoard();
     void updateBoard(bool XTurn);
     bool checkForEndState();
-    void printWinner();
+    void printWinner(int winningScore);
     bool empty();
 
 private:
