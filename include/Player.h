@@ -7,7 +7,6 @@ class Player{
 public:
     Player(char type_, int point);
     virtual std::vector<int> makeMove() = 0; // do I need virtual keyword?
-    bool isValid(std::string choice);
     char getType() const;
     int getPoint() const;
 private:
