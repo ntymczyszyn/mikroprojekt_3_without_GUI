@@ -7,8 +7,7 @@ class HumanPlayer: public Player{
 public:
     HumanPlayer(char type_, int point);
     std::vector<int> makeMove()  override;
-    //bool validateMove();
-
+    bool isValid(std::string choice);
 };
 
 #endif //MIKROPROJEKT_3_WITHOUT_GUI_HUMANPLAYER_H
