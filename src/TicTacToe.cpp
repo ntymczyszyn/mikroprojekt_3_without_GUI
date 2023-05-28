@@ -66,68 +66,73 @@ void TicTacToe::updateBoard(bool XTurn) {
 }
 
 bool TicTacToe::checkForEndState() { // trzeba sprawdzac przeciez ciaglości wystepowania tych wartosci
-    std::vector<int> winningRow(rows);
+    std::vector<int> winningRow(rows); // w sumie nie trzeba tych danych zapisywac na później
     std::vector<int> winningColumn(columns);
 
     for (int row{0}; row < rows; ++row){ // A CO JEŚLI ROBIĆ TO OD 1 I WRACAĆ??
         for (int column{0}; column < columns; ++column){ // JEŚLI MAMY ZMIANĘ ZNAKU TO WYZERUJ
-
+// te nazyw są troszke mylące czy zmienić?
             if (column - 1 < 0 or board[row][column] == board[row][column - 1])
                 winningRow[row] += board[row][column];
             else
                 winningRow[row] *= 0;
-
-            if (board[column][row] != 0)
+            
+            if (column - 1 < 0 or board[column][row] == board[column - 1][row])
                 winningColumn[row] += board[column][row];
-            else if (column - 1 >= 0 and board[column][row] != board[column - 1][row])
+            else
                 winningColumn[row] *= 0;
-
-            if (winningRow[row] == 1 * wf or winningRow[row] == -1 * wf){
-                return true;
-            }
-            if (winningColumn[row] == 1 * wf or winningColumn[row] == -1 * wf){
-                return true;
-            }
         }
+// czy one powinny nie być poza tym forem? -- tak wlasnie narazie zrobilam
+            if (winningRow[row] == playerO.getPoint() * wf or winningRow[row] == playerX.getPoint() * wf){
+                printWinner(winningRow[row]);
+                return true;
+            }
+            if (winningColumn[row] == playerO.getPoint() * wf or winningColumn[row] == playerO.getPoint() * wf){
+                printWinner(winningColumn[row])
+                return true;
+            }
+        
     }
 
     int numOfDiagonals{(rows - wf) * 2 + 1};
     int diagonal{0};
     std::vector<int> winningAcrossLeft(numOfDiagonals);
 
-    for (int row{0}; row < wf -1 ; ++row){
-        for (int column{0}; column < wf -1; ++column) {
+    for (int row{0}; row < wf - 1 ; ++row){
+        for (int column{0}; column < wf - 1; ++column) {
             for (int k{0}; k < rows - row and k < columns - column; ++k){
-                winningAcrossLeft[diagonal] += board[k + row][k + column]; //te wartosci musza wystepowac zawsze po sobie
-                // moża zrobic jakas flage ciaglosci - jest brak (jesli te ten sam numer po sobie numer to flaga sie zmieniłą to zerwanie wyniku
+                if ((k + row - 1 < 0 and k + column - 1 < 0) or board[k + row][k + column] == board[k + row - 1][k + column - 1]
+                    winningAcrossLeft[diagonal] += board[k + row][k + column];
+                 else 
+                    winningAcrossLeft[diagonal] *= 0;
             }
+            if (winningAcrossLeft[diagonal] == playerO.getPoint() * wf or winningAcrossLeft[diagonal] == playerO.getPoint() * wf){
+                printWinner(winningAcrossLeft[diagonal])
+                return true;
+            }       
             ++diagonal;
-        }
-    }
-    for (const auto& winLeft : winningAcrossLeft){
-        if (winLeft == 1 * wf or winLeft == -1 * wf){
-            return true;
         }
     }
 
     diagonal = 0;
     std::vector<int> winningAcrossRight(numOfDiagonals);
-
-    for (int row{0}; row < wf - 1 ; ++row){
-        for (int column{0}; column < wf - 1; ++column) {
-            for (int k{0}; k < rows - row and k < columns - column; ++k){
-                winningAcrossRight[diagonal] += board[k + row][k + column]; //te wartosci musza wystepowac zawsze po sobie
-                // moża zrobic jakas flage ciaglosci - jest brak (jesli te ten sam numer po sobie numer to flaga sie zmieniłą to zerwanie wyniku
+                    
+    for (int row{rows}; row > wf - 1 ; --row){
+        for (int column{columns}; column > wf - 1; --column) {
+            for (int k{0}; row - k >= 0 and column - k >= 0; --k){ // zamiast rows może size??
+                if (((row - k + 1 == size) and (column - k + 1 == size)) or board[row - k][column - k] == board[row - k + 1][column - k + 1])
+                    winningAcrossRight[diagonal] += board[row - k][column - k];
+                 else 
+                    winningAcrossRight[diagonal] *= 0;
             }
+            if (winningAcrossRight[diagonal] == playerO.getPoint() * wf or winningAcrossRight[diagonal] == playerO.getPoint() * wf){
+                printWinner(winningAcrossRight[diagonal])
+                return true;
+            }       
             ++diagonal;
         }
     }
-    for (const auto& winRight : winningAcrossRight){
-        if (winRight == 1 * wf or winRight == -1 * wf){
-            return true;
-        }
-    }
-
+                    
     for (int row{0}; row < rows; ++row) {
         for (int column{0}; column < columns; ++column) {
             if (board[row][column] == 0) {
@@ -135,7 +140,7 @@ bool TicTacToe::checkForEndState() { // trzeba sprawdzac przeciez ciaglości wys
             }
         }
     }
-
+    printWinner(0);
     return true; // tie
 }
 
@@ -148,6 +153,16 @@ bool TicTacToe::empty() {
         }
     }
     return true;
+}
+
+void TicTacToe::printWinner(int winningScore) {
+    
+    if (winningScore / wf == playerO.getPoint())
+        std::cout << "Player O won!" << std::endl;
+    else if (winningScore / wf == playerX.getPoint())
+        std::cout << "Player X won!" << std::endl;
+    else
+        std::cout << "It's a tie!" << std::endl;
 }
 
 std::string TicTacToe::whichSign(const int& score) {
