@@ -16,6 +16,7 @@ public:
     bool checkForEndState();
     void printWinner(int winningScore);
     bool empty();
+    bool isValidBoardField(std::vector<int> pos);
 
 private:
     std::string whichSign(const int& score); // what static does??
