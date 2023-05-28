@@ -69,20 +69,25 @@ bool TicTacToe::checkForEndState() { // trzeba sprawdzac przeciez ciaglości wys
     std::vector<int> winningRow(rows);
     std::vector<int> winningColumn(columns);
 
-    for (int row{0}; row < rows; ++row){
-        for (int column{0}; column < columns; ++column){
-            winningRow[row] += board[row][column];
-            winningColumn[row] += board[column][row];
-        }
-    }
-    for (const auto& winRow : winningRow){
-        if (winRow == 1 * wf or winRow == -1 * wf){
-            return true;
-        }
-    }
-    for (const auto& winCol : winningColumn){
-        if (winCol == 1 * wf or winCol == -1 * wf){
-            return true;
+    for (int row{0}; row < rows; ++row){ // A CO JEŚLI ROBIĆ TO OD 1 I WRACAĆ??
+        for (int column{0}; column < columns; ++column){ // JEŚLI MAMY ZMIANĘ ZNAKU TO WYZERUJ
+
+            if (column - 1 < 0 or board[row][column] == board[row][column - 1])
+                winningRow[row] += board[row][column];
+            else
+                winningRow[row] *= 0;
+
+            if (board[column][row] != 0)
+                winningColumn[row] += board[column][row];
+            else if (column - 1 >= 0 and board[column][row] != board[column - 1][row])
+                winningColumn[row] *= 0;
+
+            if (winningRow[row] == 1 * wf or winningRow[row] == -1 * wf){
+                return true;
+            }
+            if (winningColumn[row] == 1 * wf or winningColumn[row] == -1 * wf){
+                return true;
+            }
         }
     }
 
