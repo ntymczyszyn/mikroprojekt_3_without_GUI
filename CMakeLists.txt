@@ -4,7 +4,7 @@ project(mikroprojekt_3_without_GUI)
 set(CMAKE_CXX_STANDARD 20)
 
 set(TICTACTOE include/TicTacToe.h src/TicTacToe.cpp)
-set(PLAYER include/Player.h src/Player.cpp include/HumanPlayer.h src/HumanPlayer.cpp)
+set(PLAYER include/Player.h src/Player.cpp include/HumanPlayer.h src/HumanPlayer.cpp include/AIPlayer.h)
 
 add_executable(mikroprojekt_3_without_GUI main.cpp ${TICTACTOE} ${PLAYER})
 
