@@ -3,16 +3,35 @@
 #include <vector>
 #include <string>
 
+class TicTacToe;
+#include "TicTacToe.h"
+
 class Player{
 public:
     Player(char type_, int point);
-    virtual std::vector<int> makeMove() = 0; // do I need virtual keyword?
+    virtual void makeMove(TicTacToe* game) = 0; // do I need virtual keyword?
+    virtual ~Player();
     char getType() const;
     int getPoint() const;
 private:
     char type; // X or O
     int point;
     // value of a score?
+};
+
+
+class HumanPlayer: public Player {
+public:
+    HumanPlayer(char type_, int point);
+    void makeMove(TicTacToe* game) override;
+};
+
+
+class AIPlayer: public Player {
+public:
+    AIPlayer(char type_, int point);
+    void makeMove(TicTacToe* game) override;
+    std::map<std::vector<int>, int> MinMax(TicTacToe* game, int depth, bool maximizingPlayer);
 };
 
 #endif //MIKROPROJEKT_3_WITHOUT_GUI_PLAYER_H
