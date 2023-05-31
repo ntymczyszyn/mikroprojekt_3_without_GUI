@@ -26,23 +26,23 @@ public:
     void makeMove(TicTacToe* game) override;
 };
 
-class Node {
+class Move {
 public:
     std::vector<int> field{};
     int value{};
-    bool operator>(const Node& other) const {
+    bool operator>(const Move& other) const {
         return value > other.value;
     }
-    bool operator<(const Node& other) const {
+    bool operator<(const Move& other) const {
         return value < other.value;
     }
-    bool operator>=(const Node& other) const {
+    bool operator>=(const Move& other) const {
         return value >= other.value;
     }
-    bool operator<=(const Node& other) const {
+    bool operator<=(const Move& other) const {
         return value <= other.value;
     }
-    bool operator==(const Node& other) const {
+    bool operator==(const Move& other) const {
         return value == other.value;
     }
 };
@@ -51,7 +51,7 @@ class AIPlayer: public Player {
 public:
     AIPlayer(char type_, int point);
     void makeMove(TicTacToe* game) override;
-    Node MinMax(TicTacToe* game, const std::vector<int>& pos, int depth, bool maximizingPlayer);
+    Move MinMax(TicTacToe* game, const std::vector<int>& pos, int alpha, int beta,  int depth, bool maximizingPlayer);
 };
 
 

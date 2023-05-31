@@ -31,7 +31,7 @@ void TicTacToe::play(bool isXTurn) {
 }
 
 void TicTacToe::displayBoard() {
-    //system("clear"); // tylko windows <-'cls'; linux 'claer'
+    system("clear"); // tylko windows <-'cls'; linux 'claer'
     constexpr int AinASCII{65};
     for (char columnLetter{AinASCII}; columnLetter < columns + AinASCII; ++columnLetter){
         std::cout << "     " << columnLetter;
@@ -59,7 +59,6 @@ void TicTacToe::displayBoard() {
         }
         std::cout << std::endl;
     }
-    std::cout << emptyBoardFields() << std::endl;
 }
 
 void TicTacToe::updateBoard(bool XTurn) {
@@ -69,7 +68,6 @@ void TicTacToe::updateBoard(bool XTurn) {
     else
        currentPlayer = playerX;
 
-    std::cout << currentPlayer->getType() << std::endl;
     currentPlayer->makeMove(this);
 }
 
@@ -159,21 +157,21 @@ bool TicTacToe::empty() {
 }
 
 void TicTacToe::printWinner(const int& winningScore, bool print) {
-   // if (print){
+    if (print){
         if (winningScore == playerO->getPoint() * wf)
             std::cout << "Player O won!" << std::endl;
         else if (winningScore == playerX->getPoint() * wf)
             std::cout << "Player X won!" << std::endl;
         else
             std::cout << "It's a tie!" << std::endl;
-   // }
-    //else {
+    }
+    else {
         if (winningScore == playerO->getPoint() * wf)
             winner = playerO;
         else if (winningScore == playerX->getPoint() * wf)
             winner = playerX;
 
-    //}
+    }
 
 }
 

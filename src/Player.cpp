@@ -1,8 +1,8 @@
 #include <iostream>
 #include <string>
 #include <limits>
-#include <map>
 #include <algorithm>
+#include <unistd.h>
 #include "../include/Player.h"
 
 Player::Player(char type_, int point_): type(type_), point(point_) {
@@ -20,7 +20,6 @@ Player::~Player() {
 }
 
 HumanPlayer::HumanPlayer(char type_, int point) : Player(type_, point){
-    std::cout << "HumanPlayer" << std::endl;
 }
 
 void HumanPlayer::makeMove(TicTacToe* game){
@@ -41,90 +40,57 @@ void HumanPlayer::makeMove(TicTacToe* game){
 }
 
 AIPlayer::AIPlayer(char type_, int point) : Player(type_, point) {
-    std::cout << "AIPlayer" << std::endl;
 }
 
 void AIPlayer::makeMove(TicTacToe* game) {
-    std::cout << "AIPlayer (X) is making a move!" << std::endl;
-    //może zmienisz żeby były 2 min max które można wywyołać
-    Node position = MinMax(game,{-1,-1}, 3, true); // raczej tak ale to się może zmienić
-    std::cout << position.field[0] << " " << position.field[1] << " " << position.value << std::endl;
+    std::cout << "It's X turn!" << std::endl;
+    Move position = MinMax(game, {-1, -1},std::numeric_limits<int>::min(), std::numeric_limits<int>::max(), 3, true); // raczej tak ale to się może zmienić
     game->board[position.field[0]][position.field[1]] = this->getPoint();
+    sleep(1);
 }
-// zwraca pozycję oraz jej wartość
-Node AIPlayer::MinMax(TicTacToe* game, const std::vector<int>& pos, int depth, bool maximizingPlayer) {
-    // trzeba wymyśleć jak sprawdzać kto wygrał i zależnie od tego przyznawać punkty
-    // czy to można uniezależnić od znaku
 
+Move AIPlayer::MinMax(TicTacToe* game, const std::vector<int>& pos, int alpha, int beta, int depth, bool maximizingPlayer) {
+    // czy to można uniezależnić od znaku
     if (game->isGameOver(false)){ //depth == 0 or
         if (game->winner == game->playerX) // X won (WE WON)
-            return {pos, 1 * (game->emptyBoardFields() + 1)}; // static evaluation
+            return {pos, 1 * (game->emptyBoardFields() + 1)};
         else if (game->winner == game->playerO) // O won
             return {pos,-1 * (game->emptyBoardFields() + 1)}; // tie
         else
             return {pos, 0};
     }
     if (maximizingPlayer){
-        Node maxEval = {{-1,-1}, std::numeric_limits<int>::min()};
-        std::cout << "(MAX EVAL - BEFORE FOR) X player "<< maxEval.value << std::endl;
+        Move maxEval = {{-1, -1}, std::numeric_limits<int>::min()};
         for (const auto& position : game->availableMoves()){
             game->board[position[0]][position[1]] = this->getPoint();
-            std::cout << "(BEFORE MINMAX) X player "<< position[0] << " " << position[1] << std::endl;
-            auto eval = MinMax(game, position, depth - 1, false);
-            std::cout << "X player (AFTER MINMAX) "<< eval.field[0] << " " << eval.field[1] << " " << eval.value << std::endl;
-            if (maxEval.value < eval.value) {
-                maxEval.value = eval.value;
-                maxEval.field = eval.field;
-                std::cout << "X player (IN IF)"<< eval.field[0] << " " << eval.field[1] << " " << eval.value << std::endl;
-            }
-            //maxEval = std::max(maxEval, eval);
+            auto eval = MinMax(game, position, alpha, beta, depth - 1, false);
             //redo the step
             game->winner = nullptr;
             game->board[position[0]][position[1]] = 0;
+
+            maxEval = std::max(maxEval, eval);
+            alpha = std::max(alpha, eval.value);
+            if (beta <= alpha)
+                break;
+
         }
-        std::cout << "X player (MAX EVAL) "<< maxEval.value << std::endl;
         return maxEval;
     }
     else {
-        Node minEval = {{-1,-1}, std::numeric_limits<int>::max()};
+        Move minEval = {{-1, -1}, std::numeric_limits<int>::max()};
         for (const auto& position : game->availableMoves()){
             game->board[position[0]][position[1]] = -this->getPoint();
-            std::cout << "(BEFORE MINMAX) O player "<< position[0] << " " << position[1] << std::endl;
-            auto eval = MinMax(game, position, depth - 1, true);
-            std::cout << "O player (AFTER MINMAX) "<< eval.field[0] << " " << eval.field[1] << " " << eval.value << std::endl;
-            if (minEval.value > eval.value) {
-                minEval.value = eval.value;
-                minEval.field = eval.field;
-                std::cout << "O player (IN IF)"<< eval.field[0] << " " << eval.field[1] << " " << eval.value << std::endl;
-            }
-            //minEval = std::min(minEval, eval);
+            auto eval = MinMax(game, position, alpha, beta, depth - 1, true);
             //redo the step
             game->winner = nullptr;
             game->board[position[0]][position[1]] = 0;
+
+            minEval = std::min(minEval, eval);
+            beta = std::min(beta, eval.value);
+            if (beta <= alpha)
+                break;
         }
-        std::cout << "O player (MIN EVAL) " << minEval.value << std::endl;
         return minEval;
     }
-
 }
-//function minimax(position, depth, maximizingPlayer)
-//if depth == 0 or game over in position
-//return static evaluation of position
-//
-//if maximizingPlayer
-//        maxEval = -infinity
-//for each child of position
-//eval = minimax(child, depth - 1, false)
-//maxEval = max(maxEval, eval)
-//return maxEval
-//
-//else
-//minEval = +infinity
-//for each child of position
-//eval = minimax(child, depth - 1, true)
-//minEval = min(minEval, eval)
-//return minEval
-//
-//
-//// initial call
-//minimax(currentPosition, 3, true)
+
