@@ -5,16 +5,19 @@
 TicTacToe::TicTacToe(int numRows, int numColumns, int winningF):
     rows(numRows), columns(numColumns), board(numRows, std::vector<int> (numColumns, 0)), wf(winningF){
     playerO = new HumanPlayer('O', 1);
-    playerX = new HumanPlayer('X', -1);
+    playerX = new AIPlayer('X', -1);
+    winner = nullptr;
 }
 
 TicTacToe::~TicTacToe() {
     delete playerO;
     delete playerX;
+    if (winner)
+        delete winner;
 }
 
 void TicTacToe::play(bool isXTurn) {
-    if (isGameOver()) {
+    if (isGameOver(true)) {
         return;
     }
     if (empty()){
@@ -28,7 +31,7 @@ void TicTacToe::play(bool isXTurn) {
 }
 
 void TicTacToe::displayBoard() {
-    system("clear"); // tylko windows <-'cls'; linux 'claer'
+    //system("clear"); // tylko windows <-'cls'; linux 'claer'
     constexpr int AinASCII{65};
     for (char columnLetter{AinASCII}; columnLetter < columns + AinASCII; ++columnLetter){
         std::cout << "     " << columnLetter;
@@ -66,10 +69,11 @@ void TicTacToe::updateBoard(bool XTurn) {
     else
        currentPlayer = playerX;
 
+    std::cout << currentPlayer->getType() << std::endl;
     currentPlayer->makeMove(this);
 }
 
-bool TicTacToe::isGameOver() {
+bool TicTacToe::isGameOver(bool printWin) {
     std::vector<int> winningRow(rows); // w sumie nie trzeba tych danych zapisywac na później
     std::vector<int> winningColumn(columns);
 
@@ -88,11 +92,11 @@ bool TicTacToe::isGameOver() {
             }
 
             if (winningRow[row] == playerO->getPoint() * wf or winningRow[row] == playerX->getPoint() * wf){
-                printWinner(winningRow[row]);
+                printWinner(winningRow[row], printWin);
                 return true;
             }
             if (winningColumn[row] == playerO->getPoint() * wf or winningColumn[row] == playerX->getPoint() * wf){
-                printWinner(winningColumn[row]);
+                printWinner(winningColumn[row],printWin);
                 return true;
             }
         }
@@ -114,7 +118,7 @@ bool TicTacToe::isGameOver() {
                 }
 
                 if (winningAcrossLeft[diagonal] == playerO->getPoint() * wf or winningAcrossLeft[diagonal] == playerX->getPoint() * wf){
-                    printWinner(winningAcrossLeft[diagonal]);
+                    printWinner(winningAcrossLeft[diagonal],printWin);
                     return true;
                 }
             }
@@ -135,7 +139,7 @@ bool TicTacToe::isGameOver() {
                 }
                 if (winningAcrossRight[diagonal] == playerO->getPoint() * wf or winningAcrossRight[diagonal] == playerX->
                 getPoint() * wf){
-                    printWinner(winningAcrossRight[diagonal]);
+                    printWinner(winningAcrossRight[diagonal],printWin);
                     return true;
                 }
             }
@@ -146,7 +150,7 @@ bool TicTacToe::isGameOver() {
     if (emptyBoardFields() != 0)
         return false;
 
-    printWinner(0);
+    printWinner(0,printWin);
     return true; // tie
 }
 
@@ -154,13 +158,23 @@ bool TicTacToe::empty() {
     return emptyBoardFields() == rows * columns;
 }
 
-void TicTacToe::printWinner(const int& winningScore) {
-    if (winningScore == playerO->getPoint() * wf)
-        std::cout << "Player O won!" << std::endl;
-    else if (winningScore == playerX->getPoint() * wf)
-        std::cout << "Player X won!" << std::endl;
-    else
-        std::cout << "It's a tie!" << std::endl;
+void TicTacToe::printWinner(const int& winningScore, bool print) {
+   // if (print){
+        if (winningScore == playerO->getPoint() * wf)
+            std::cout << "Player O won!" << std::endl;
+        else if (winningScore == playerX->getPoint() * wf)
+            std::cout << "Player X won!" << std::endl;
+        else
+            std::cout << "It's a tie!" << std::endl;
+   // }
+    //else {
+        if (winningScore == playerO->getPoint() * wf)
+            winner = playerO;
+        else if (winningScore == playerX->getPoint() * wf)
+            winner = playerX;
+
+    //}
+
 }
 
 std::string TicTacToe::whichSign(const int& score) {

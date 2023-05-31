@@ -17,8 +17,8 @@ public:
     void displayBoard();
     void updateBoard(bool XTurn);
 
-    bool isGameOver();
-    void printWinner(const int& winningScore);
+    bool isGameOver(bool printWin);
+    void printWinner(const int& winningScore, bool print);
 
     bool empty();
     bool isValidBoardField(const std::vector<int>& pos);
@@ -26,13 +26,16 @@ public:
     int emptyBoardFields();
 
     std::vector<std::vector<int>> board;
+    Player* winner;
+    Player* playerO; // or maybe pointers??
+    Player* playerX; // how to change to use Player class here
 private:
     std::string whichSign(const int& score); // what static does??
     int rows;
     int columns;
     int wf; // wining fields
-    Player* playerO; // or maybe pointers??
-    Player* playerX; // how to change to use Player class here
+
     //friend class Player;
+
 };
 #endif //MIKROPROJEKT_3_WITHOUT_GUI_TICTACTOE_H

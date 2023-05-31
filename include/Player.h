@@ -26,12 +26,33 @@ public:
     void makeMove(TicTacToe* game) override;
 };
 
+class Node {
+public:
+    std::vector<int> field{};
+    int value{};
+    bool operator>(const Node& other) const {
+        return value > other.value;
+    }
+    bool operator<(const Node& other) const {
+        return value < other.value;
+    }
+    bool operator>=(const Node& other) const {
+        return value >= other.value;
+    }
+    bool operator<=(const Node& other) const {
+        return value <= other.value;
+    }
+    bool operator==(const Node& other) const {
+        return value == other.value;
+    }
+};
 
 class AIPlayer: public Player {
 public:
     AIPlayer(char type_, int point);
     void makeMove(TicTacToe* game) override;
-    std::map<std::vector<int>, int> MinMax(TicTacToe* game, int depth, bool maximizingPlayer);
+    Node MinMax(TicTacToe* game, const std::vector<int>& pos, int depth, bool maximizingPlayer);
 };
+
 
 #endif //MIKROPROJEKT_3_WITHOUT_GUI_PLAYER_H
