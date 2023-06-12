@@ -27,15 +27,14 @@ public:
 
     std::vector<std::vector<int>> board;
     Player* winner;
-    Player* playerO; // or maybe pointers??
-    Player* playerX; // how to change to use Player class here
 private:
-    std::string whichSign(const int& score); // what static does??
+    Player* playerO;
+    Player* playerX;
+
+    std::string whichSign(const int& score);
     int rows;
     int columns;
     int wf; // wining fields
-
-    //friend class Player;
 
 };
 #endif //MIKROPROJEKT_3_WITHOUT_GUI_TICTACTOE_H

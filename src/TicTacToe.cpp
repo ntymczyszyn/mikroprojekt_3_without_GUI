@@ -1,7 +1,7 @@
 #include "../include/TicTacToe.h"
 #include <iostream>
 #include <algorithm>
-
+#include <random>
 TicTacToe::TicTacToe(int numRows, int numColumns, int winningF):
     rows(numRows), columns(numColumns), board(numRows, std::vector<int> (numColumns, 0)), wf(winningF){
     playerO = new HumanPlayer('O', 1);
@@ -31,7 +31,7 @@ void TicTacToe::play(bool isXTurn) {
 }
 
 void TicTacToe::displayBoard() {
-    system("clear"); // tylko windows <-'cls'; linux 'claer'
+    system("clear");
     constexpr int AinASCII{65};
     for (char columnLetter{AinASCII}; columnLetter < columns + AinASCII; ++columnLetter){
         std::cout << "     " << columnLetter;
@@ -77,7 +77,6 @@ bool TicTacToe::isGameOver(bool printWin) {
 
     for (int row{0}; row < rows; ++row){
         for (int column{0}; column < columns; ++column){
-// te nazyw są troszke mylące czy zmienić?
             if (column - 1 < 0 or board[row][column] == board[row][column - 1]) {
                 winningRow[row] += board[row][column];
             } else if (board[row][column] != board[row][column - 1]) {
@@ -198,6 +197,9 @@ std::vector<std::vector<int>> TicTacToe::availableMoves() {
                 emptyBoardFields.push_back({i, j});
         }
     }
+    std::random_device rd;
+    std::default_random_engine generator(rd());
+    std::shuffle(emptyBoardFields.begin(), emptyBoardFields.end(), generator);
     return  emptyBoardFields;
 }
 
