@@ -49,9 +49,11 @@ public:
 
 class AIPlayer: public Player {
 public:
-    AIPlayer(char type_, int point);
+    AIPlayer(char type_, int point, int maxdepth_);
     void makeMove(TicTacToe* game) override;
     Move MinMax(TicTacToe* game, const std::vector<int>& pos, int alpha, int beta,  int depth, bool maximizingPlayer);
+private:
+    int maxdepth;
 };
 
 

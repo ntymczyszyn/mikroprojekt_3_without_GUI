@@ -27,12 +27,13 @@ public:
 
     std::vector<std::vector<int>> board;
     Player* winner;
+    int rows;
+
 private:
     Player* playerO;
     Player* playerX;
-
     std::string whichSign(const int& score);
-    int rows;
+
     int columns;
     int wf; // wining fields
 

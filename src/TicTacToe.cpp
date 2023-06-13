@@ -4,16 +4,17 @@
 #include <random>
 TicTacToe::TicTacToe(int numRows, int numColumns, int winningF):
     rows(numRows), columns(numColumns), board(numRows, std::vector<int> (numColumns, 0)), wf(winningF){
+    //playerO = new AIPlayer('O', 1, 9);
     playerO = new HumanPlayer('O', 1);
-    playerX = new AIPlayer('X', -1);
+    playerX = new AIPlayer('X', -1, 9);
     winner = nullptr;
 }
 
 TicTacToe::~TicTacToe() {
     delete playerO;
     delete playerX;
-    if (winner)
-        delete winner;
+//    if (winner)
+//        delete winner;
 }
 
 void TicTacToe::play(bool isXTurn) {
@@ -128,7 +129,7 @@ bool TicTacToe::isGameOver(bool printWin) {
 
     for (int row{0}; row < wf - 1 ; ++row){
         for (int column{columns - 1}; column > columns - wf; --column) {
-            for (int k{0}; k < rows - row  and column - k >= 0; ++k){ // zamiast rows może size??
+            for (int k{0}; k < rows - row  and column - k >= 0; ++k){
                 if ((k + row - 1 < 0) or (column - k + 1 >= rows) or board[row + k][column - k] == board[row + k - 1][column - k + 1]) {
                     winningAcrossRight[diagonal] += board[row + k][column - k];
                 } else if (board[row + k][column - k] != board[row + k - 1][column - k + 1]) {
@@ -157,10 +158,14 @@ bool TicTacToe::empty() {
 
 void TicTacToe::printWinner(const int& winningScore, bool print) {
     if (print){
-        if (winningScore == playerO->getPoint() * wf)
+        if (winningScore == playerO->getPoint() * wf){
             std::cout << "Player O won!" << std::endl;
-        else if (winningScore == playerX->getPoint() * wf)
+            winner = playerO;
+        }
+        else if (winningScore == playerX->getPoint() * wf){
             std::cout << "Player X won!" << std::endl;
+            winner = playerX;
+        }
         else
             std::cout << "It's a tie!" << std::endl;
     }
@@ -197,9 +202,9 @@ std::vector<std::vector<int>> TicTacToe::availableMoves() {
                 emptyBoardFields.push_back({i, j});
         }
     }
-    std::random_device rd;
-    std::default_random_engine generator(rd());
-    std::shuffle(emptyBoardFields.begin(), emptyBoardFields.end(), generator);
+//    std::random_device rd;
+//    std::default_random_engine generator(rd());
+//    std::shuffle(emptyBoardFields.begin(), emptyBoardFields.end(), generator);
     return  emptyBoardFields;
 }
 

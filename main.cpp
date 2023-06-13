@@ -2,8 +2,9 @@
 #include "include/TicTacToe.h"
 #include <iostream>
 
-void playTicTacToe(std::unique_ptr<TicTacToe> game){
+auto playTicTacToe(std::unique_ptr<TicTacToe> game){
     game->play(false);
+    return game->winner;
 }
 
 int main() {
@@ -19,6 +20,16 @@ int main() {
         std::cin >> winning;
     } while (size < 3 and winning < 2);
 
+    int tie{0};
+
+//    for (int i {0}; i < 10; ++i){
+//
+//        if (not playTicTacToe (std::make_unique<TicTacToe>(size,size, winning))){
+//            tie++;
+//        }
+//
+//    }
+   // std::cout << "Number of ties " << tie << "/10" << std::endl;
     do {
         playTicTacToe (std::make_unique<TicTacToe>(size,size, winning));
         std::cout << "Want to play again? [y/n] ";
