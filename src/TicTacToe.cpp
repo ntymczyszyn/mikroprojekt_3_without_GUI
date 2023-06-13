@@ -6,7 +6,7 @@ TicTacToe::TicTacToe(int numRows, int numColumns, int winningF):
     rows(numRows), columns(numColumns), board(numRows, std::vector<int> (numColumns, 0)), wf(winningF){
     //playerO = new AIPlayer('O', 1, 9);
     playerO = new HumanPlayer('O', 1);
-    playerX = new AIPlayer('X', -1, 9);
+    playerX = new AIPlayer('X', -1, 8);
     winner = nullptr;
 }
 
@@ -32,7 +32,7 @@ void TicTacToe::play(bool isXTurn) {
 }
 
 void TicTacToe::displayBoard() {
-    system("clear");
+    //system("clear");
     constexpr int AinASCII{65};
     for (char columnLetter{AinASCII}; columnLetter < columns + AinASCII; ++columnLetter){
         std::cout << "     " << columnLetter;
@@ -202,9 +202,10 @@ std::vector<std::vector<int>> TicTacToe::availableMoves() {
                 emptyBoardFields.push_back({i, j});
         }
     }
-//    std::random_device rd;
-//    std::default_random_engine generator(rd());
-//    std::shuffle(emptyBoardFields.begin(), emptyBoardFields.end(), generator);
+    // chec for which plear are we maikng it and adjust accrodingly
+    std::random_device rd;
+    std::mt19937  generator(rd());
+    std::shuffle(emptyBoardFields.begin(), emptyBoardFields.end(), generator);
     return  emptyBoardFields;
 }
 

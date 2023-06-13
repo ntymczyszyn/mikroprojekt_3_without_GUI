@@ -4,6 +4,7 @@
 
 auto playTicTacToe(std::unique_ptr<TicTacToe> game){
     game->play(false);
+    //std::cout << game->winner->getType() << std::endl;
     return game->winner;
 }
 

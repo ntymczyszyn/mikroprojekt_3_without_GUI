@@ -7,4 +7,4 @@ set(TICTACTOE include/TicTacToe.h src/TicTacToe.cpp)
 set(PLAYER include/Player.h src/Player.cpp)
 
 add_executable(mikroprojekt_3_without_GUI main.cpp ${TICTACTOE} ${PLAYER})
-add_executable(test test.cpp)
+#add_executable(test test.cpp)
