@@ -10,14 +10,13 @@ class TicTacToe;
 class Player{
 public:
     Player(char type_, int point);
-    virtual void makeMove(TicTacToe* game) = 0; // do I need virtual keyword?
+    virtual void makeMove(TicTacToe* game) = 0;
     virtual ~Player();
     char getType() const;
     int getPoint() const;
 private:
     char type; // X or O
     int point;
-    // value of a score?
 };
 
 
@@ -52,8 +51,8 @@ class AIPlayer: public Player {
 public:
     AIPlayer(char type_, int point, int maxdepth_);
     void makeMove(TicTacToe* game) override;
-    Move MinMax(int round, int move, TicTacToe* game, const std::vector<int>& pos, int alpha, int beta,  int depth, bool maximizingPlayer);
-    int evaluate( TicTacToe* game);
+    Move MinMax(TicTacToe* game, const std::vector<int>& pos, int alpha, int beta,  int depth, bool maximizingPlayer);
+    int evaluate( TicTacToe* game, bool finished);
     std::ofstream file;
 private:
     int maxdepth;

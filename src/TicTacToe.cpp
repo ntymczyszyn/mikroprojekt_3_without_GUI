@@ -1,20 +1,19 @@
-#include "../include/TicTacToe.h"
 #include <iostream>
 #include <algorithm>
 #include <random>
-TicTacToe::TicTacToe(int numRows, int numColumns, int winningF):
+#include "../include/TicTacToe.h"
+
+TicTacToe::TicTacToe(int numRows, int numColumns, int winningF, int maxdepth):
     rows(numRows), columns(numColumns), board(numRows, std::vector<int> (numColumns, 0)), wf(winningF){
     //playerO = new AIPlayer('O', 1, 9);
     playerO = new HumanPlayer('O', 1);
-    playerX = new AIPlayer('X', -1, 8);
+    playerX = new AIPlayer('X', -1, maxdepth);
     winner = nullptr;
 }
 
 TicTacToe::~TicTacToe() {
     delete playerO;
     delete playerX;
-//    if (winner)
-//        delete winner;
 }
 
 void TicTacToe::play(bool isXTurn) {
@@ -32,7 +31,7 @@ void TicTacToe::play(bool isXTurn) {
 }
 
 void TicTacToe::displayBoard() {
-    //system("clear");
+    system("clear");
     constexpr int AinASCII{65};
     for (char columnLetter{AinASCII}; columnLetter < columns + AinASCII; ++columnLetter){
         std::cout << "     " << columnLetter;
@@ -73,7 +72,7 @@ void TicTacToe::updateBoard(bool XTurn) {
 }
 
 bool TicTacToe::isGameOver(bool printWin) {
-    std::vector<int> winningRow(rows); // w sumie nie trzeba tych danych zapisywac na później
+    std::vector<int> winningRow(rows);
     std::vector<int> winningColumn(columns);
 
     for (int row{0}; row < rows; ++row){
@@ -99,7 +98,6 @@ bool TicTacToe::isGameOver(bool printWin) {
             }
         }
 
-        
     }
 
     int numOfDiagonals{(rows - wf) * 2 + 1};
@@ -160,23 +158,17 @@ void TicTacToe::printWinner(const int& winningScore, bool print) {
     if (print){
         if (winningScore == playerO->getPoint() * wf){
             std::cout << "Player O won!" << std::endl;
-            winner = playerO;
         }
         else if (winningScore == playerX->getPoint() * wf){
             std::cout << "Player X won!" << std::endl;
-            winner = playerX;
         }
         else
             std::cout << "It's a tie!" << std::endl;
     }
-    else {
-        if (winningScore == playerO->getPoint() * wf)
-            winner = playerO;
-        else if (winningScore == playerX->getPoint() * wf)
-            winner = playerX;
-
-    }
-
+    if (winningScore == playerO->getPoint() * wf)
+        winner = playerO;
+    else if (winningScore == playerX->getPoint() * wf)
+        winner = playerX;
 }
 
 std::string TicTacToe::whichSign(const int& score) {
@@ -202,7 +194,6 @@ std::vector<std::vector<int>> TicTacToe::availableMoves() {
                 emptyBoardFields.push_back({i, j});
         }
     }
-    // chec for which plear are we maikng it and adjust accrodingly
     std::random_device rd;
     std::mt19937  generator(rd());
     std::shuffle(emptyBoardFields.begin(), emptyBoardFields.end(), generator);

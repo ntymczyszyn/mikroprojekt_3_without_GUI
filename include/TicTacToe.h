@@ -2,15 +2,15 @@
 #define MIKROPROJEKT_3_WITHOUT_GUI_TICTACTOE_H
 #include <vector>
 #include <string>
+
 class Player;
 class HumanPlayer;
 class AIPlayer;
 #include "Player.h"
 
-
 class TicTacToe {
 public:
-    TicTacToe(int numRows, int numColumns, int winningF);
+    TicTacToe(int numRows, int numColumns, int winningF, int maxdepth);
     ~TicTacToe();
 
     void play(bool XTurn); // true == playerO
